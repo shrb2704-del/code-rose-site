@@ -1,0 +1,177 @@
+---
+import { Image } from "astro:assets";
+import "@fontsource-variable/montserrat";
+import "@fontsource-variable/onest";
+import "@fontsource/caveat/600.css";
+import "../styles/global.css";
+import type { Dict } from "../i18n/ru";
+import { site, links } from "../config";
+import hero from "../assets/hero.jpg";
+import system from "../assets/system.jpg";
+import caseDent from "../assets/case-dent.jpg";
+import caseSalon from "../assets/case-salon.jpg";
+import final from "../assets/final.jpg";
+import rose from "../assets/rose.png";
+
+interface Props { t: Dict }
+const { t } = Astro.props;
+
+const icons: Record<string, string> = {
+  scan: '<circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/>',
+  spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6.3 6.3l2.5 2.5M15.2 15.2l2.5 2.5M17.7 6.3l-2.5 2.5M8.8 15.2l-2.5 2.5"/>',
+  chat: '<path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 4v-4A2.5 2.5 0 0 1 4 13.5z"/>',
+  chart: '<path d="M4 20V4M4 20h16M8.5 16v-4M12.5 16V8M16.5 16v-6"/>',
+  funnel: '<path d="M4 5h16l-6 7.5V19l-4-2v-4.5z"/>',
+  box: '<path d="M4 8 12 4l8 4v8l-8 4-8-4zM4 8l8 4 8-4M12 12v8"/>',
+};
+const cases = [caseDent, caseSalon];
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const noindex = import.meta.env.PUBLIC_NOINDEX === "1";
+const canonical = site.url ? new URL(t.home, site.url).href : "";
+const contacts = [
+  { label: "WhatsApp", href: links.whatsapp, main: true },
+  { label: "Telegram", href: links.telegram },
+  { label: "Instagram", href: links.instagram },
+  { label: t.contact.call, href: links.phone },
+  { label: t.contact.mail, href: links.email },
+].filter((c) => c.href);
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: site.name,
+  description: t.meta.description,
+  ...(site.url && { url: site.url }),
+  ...(site.email && { email: site.email }),
+  ...(site.phone && { telephone: site.phone }),
+  areaServed: "TJ",
+  sameAs: [links.instagram, links.telegram].filter(Boolean),
+};
+---
+<!doctype html>
+<html lang={t.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{t.meta.title}</title>
+    <meta name="description" content={t.meta.description} />
+    <meta name="theme-color" content="#080c1e" />
+    <link rel="icon" type="image/png" href={base + "/favicon.png"} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    {site.url && <link rel="alternate" hreflang="ru" href={new URL("/", site.url).href} />}
+    {site.url && <link rel="alternate" hreflang="en" href={new URL("/en/", site.url).href} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={t.meta.title} />
+    <meta property="og:description" content={t.meta.description} />
+    {site.url && <meta property="og:image" content={new URL(hero.src, site.url).href} />}
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <header class="top" id="top">
+      <a class="brand" href={base + t.home}><span><Image src={rose} alt="" width={52} /></span>{site.name}</a>
+      <nav id="nav">
+        <a href="#how">{t.nav.how}</a>
+        <a href="#system">{t.nav.system}</a>
+        <a href="#cases">{t.nav.cases}</a>
+        <a href="#contact">{t.nav.contact}</a>
+      </nav>
+      <div class="hr">
+        <a class="lang" href={base + t.other.href} hreflang={t.other.label.toLowerCase()}>{t.other.label}</a>
+        <a class="pill" href="#contact">{t.nav.cta} <i>→</i></a>
+        <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><b></b><b></b></button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="hero">
+        <Image class="bg" src={hero} alt="" widths={[900, 1600, 2400]} sizes="100vw" loading="eager" fetchpriority="high" quality={78} />
+        <div class="shade"></div>
+        <div class="copy">
+          <p class="tag">{t.hero.tag.map((w, i) => (<>{i > 0 && <i>/</i>}<span>{w}</span></>))}</p>
+          <h1><span class="l"><span>{t.hero.title[0]}</span></span><span class="l"><span><em>{t.hero.title[1]}</em></span></span></h1>
+          <p class="sub">{t.hero.sub}</p>
+          <div class="cta">
+            <a class="pill lg" href="#contact">{t.hero.primary} <i>→</i></a>
+            <a class="play" href="#how"><i class="glass">↓</i>{t.hero.secondary}</a>
+          </div>
+        </div>
+        <div class="card glass">
+          <b>✓</b>
+          <div><strong>{t.hero.card.title}</strong><small>{t.hero.card.lines[0]}<br />{t.hero.card.lines[1]}</small></div>
+        </div>
+        <div class="script" aria-hidden="true">{t.hero.script[0]}<br />{t.hero.script[1]}</div>
+        <ul class="feats">
+          {t.hero.feats.map((f) => (
+            <li class="f"><i class="glass"><svg viewBox="0 0 24 24" set:html={icons[f.icon]} /></i><div><strong>{f.title}</strong><small>{f.text}</small></div></li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="how pad" id="how">
+        <div class="head">
+          <div><p class="eb">{t.how.eyebrow}</p><h2>{t.how.title[0]}<br /><em>{t.how.title[1]}</em></h2></div>
+          <p class="lead">{t.how.lead}</p>
+        </div>
+        <div class="steps">
+          <svg class="wave" viewBox="0 0 1200 130" preserveAspectRatio="none" aria-hidden="true">
+            <defs><linearGradient id="wg"><stop offset="0" stop-color="#ff5f8f" /><stop offset=".5" stop-color="#ffb37a" /><stop offset="1" stop-color="#ffe08a" /></linearGradient></defs>
+            <path id="wp" d="M0,90 C150,10 250,120 400,60 S650,0 800,70 S1050,120 1200,30" fill="none" stroke="url(#wg)" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke" />
+          </svg>
+          {t.how.steps.map((s, i) => (
+            <article class="step"><b>{String(i + 1).padStart(2, "0")}</b><h3>{s.title}</h3><p>{s.text}</p></article>
+          ))}
+        </div>
+      </section>
+
+      <section class="full sys" id="system">
+        <Image class="pic" src={system} alt="" widths={[900, 1600, 2400]} sizes="100vw" loading="lazy" quality={76} />
+        <div class="veil"></div>
+        <div class="pad wide">
+          <div class="box">
+            <p class="eb">{t.system.eyebrow}</p>
+            <h2>{t.system.title[0]} <em>{t.system.title[1]}</em> {t.system.title[2]}</h2>
+            <ul class="rows">
+              {t.system.rows.map((r) => (
+                <li class="row glass"><i><svg viewBox="0 0 24 24" set:html={icons[r.icon]} /></i><div><strong>{r.title}</strong><small>{r.text}</small></div></li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="cases pad" id="cases">
+        <p class="eb">{t.cases.eyebrow}</p>
+        <h2>{t.cases.title[0]} <em>{t.cases.title[1]}</em></h2>
+        <div class="two">
+          {t.cases.items.map((c, i) => (
+            <article class="case">
+              <Image src={cases[i]} alt="" widths={[640, 1000, 1600]} sizes="(max-width: 900px) 100vw, 50vw" loading="lazy" quality={76} />
+              <span class="ill glass">{t.cases.note}</span>
+              <div class="cap glass"><span>{c.kind}</span><h3>{c.name}</h3><p>{c.text}</p></div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="full fin" id="contact">
+        <Image class="pic" src={final} alt="" widths={[900, 1600, 2400]} sizes="100vw" loading="lazy" quality={76} />
+        <div class="veil"></div>
+        <div class="pad wide">
+          <p class="eb center">{t.contact.eyebrow}</p>
+          <h2>{t.contact.title[0]} <em>{t.contact.title[1]}</em></h2>
+          <p class="lead">{t.contact.lead}</p>
+          <div class="btns">
+            {contacts.map((c) => (
+              <a class={c.main ? "pill lg" : "gbtn glass"} href={c.href} target={c.href.startsWith("http") ? "_blank" : undefined} rel={c.href.startsWith("http") ? "noopener" : undefined}>{c.label}{c.main && <i>→</i>}</a>
+            ))}
+          </div>
+        </div>
+        <footer><span>© {new Date().getFullYear()} {site.name} · {t.footer.place}</span><span>{t.footer.line}</span></footer>
+      </section>
+    </main>
+
+    <script>
+      import "../scripts/motion.ts";
+    </script>
+  </body>
+</html>
