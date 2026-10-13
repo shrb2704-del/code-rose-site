@@ -122,30 +122,75 @@ h2 { font-family: var(--display); font-weight: 800; font-size: clamp(30px, 4vw, 
 .gbtn:hover { background: rgba(255, 255, 255, .3); transform: translateY(-2px); }
 footer { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 22px var(--gut); font-size: 13px; opacity: .8; }
 
+/* бегущая строка */
+.marquee { overflow: hidden; white-space: nowrap; padding: 18px 0; border-top: 1px solid rgba(255, 255, 255, .1); border-bottom: 1px solid rgba(255, 255, 255, .1); background: #0b1026; font-family: var(--display); font-weight: 700; font-size: clamp(18px, 2vw, 26px); letter-spacing: -.02em; }
+.marquee div { display: inline-flex; align-items: center; animation: run 32s linear infinite; }
+.marquee span { padding: 0 22px; opacity: .9; }
+.marquee i { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: .8em; }
+@keyframes run { to { transform: translateX(-50%); } }
+h1 em { background-size: 220% 100%; animation: shimmer 5s ease-in-out infinite alternate; }
+@keyframes shimmer { to { background-position: 100% 0; } }
+.track { display: none; }
+
 @media (max-width: 900px) {
   .burger { display: block; }
+  .top { padding-top: 14px; padding-bottom: 14px; }
   .top .pill { display: none; }
   #nav { position: fixed; inset: 0; z-index: -1; flex-direction: column; justify-content: center; align-items: center; gap: 28px; font-family: var(--display); font-weight: 700; font-size: 28px; background: rgba(8, 12, 30, .94); backdrop-filter: blur(20px); opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s; }
   #nav.open { opacity: 1; visibility: visible; }
-  .card, .script { display: none; }
-  .hero .bg { object-position: 78% 50%; }
-  .shade { background: linear-gradient(0deg, rgba(6, 10, 26, .8) 0, rgba(8, 16, 48, .35) 45%, rgba(6, 10, 26, .45) 100%); }
-  .copy { padding-bottom: 14vh; }
-  .tag { font-size: 10.5px; letter-spacing: .14em; gap: 8px; white-space: nowrap; }
-  .feats { flex-wrap: wrap; gap: 14px 22px; }
-  .f small { display: none; }
-  .steps { grid-template-columns: 1fr 1fr; }
+
+  /* первый экран: картина сверху, текст на тёмном внизу */
+  .hero { height: auto; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 var(--gut) 30px; }
+  .hero .bg { left: 0; top: 0; width: 100%; height: 64svh; object-position: 93% 40%; }
+  .shade { background: linear-gradient(180deg, rgba(8, 12, 30, .5) 0, transparent 14%, transparent 30svh, var(--night) 62svh); }
+  .copy { position: relative; left: auto; display: block; margin-top: 43svh; padding-bottom: 0; max-width: none; }
+  .tag { font-size: 10.5px; letter-spacing: .16em; gap: 8px; white-space: nowrap; }
+  h1 { font-size: clamp(40px, 12.4vw, 60px); margin: 14px 0 16px; }
+  .sub { font-size: 16.5px; max-width: none; }
+  .cta { gap: 16px; margin-top: 26px; }
+  .cta .pill.lg { width: 100%; justify-content: center; }
+  .card { top: 88px; right: auto; left: var(--gut); padding: 10px 14px 10px 10px; gap: 10px; border-radius: 16px; }
+  .card b { width: 34px; height: 34px; font-size: 15px; }
+  .card strong { font-size: 13px; }
+  .card small { font-size: 11.5px; }
+  .script { display: none; }
+  .feats { position: static; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 30px; }
+  .f { padding: 12px; border-radius: 16px; background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .14); gap: 10px; align-items: flex-start; flex-direction: column; }
+  .f i { width: 38px; height: 38px; }
+  .f strong { font-size: 14.5px; }
+  .f small { display: block; font-size: 12px; line-height: 1.35; margin-top: 2px; }
+
+  /* подход: вертикальная линия шагов, которая заполняется при прокрутке */
+  .how, .cases { padding-top: 76px; padding-bottom: 76px; }
+  .head { display: block; }
+  .steps { grid-template-columns: 1fr; gap: 14px; margin-top: 40px; padding-left: 30px; }
   .wave { display: none; }
-  .two { grid-template-columns: 1fr; }
-  .sys .veil { background: rgba(6, 9, 26, .78); }
-  .sys .box { margin: 0; }
-}
-@media (max-width: 520px) {
-  .steps { grid-template-columns: 1fr; }
-  .case { aspect-ratio: 4/4.4; }
-  footer { justify-content: center; text-align: center; }
+  .track { display: block; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; border-radius: 2px; background: rgba(255, 255, 255, .14); overflow: hidden; }
+  .track i { position: absolute; inset: 0; background: linear-gradient(180deg, #ff5f8f, #ffb37a, #ffe08a); transform-origin: top; transform: scaleY(0); box-shadow: 0 0 12px #ff7aa5; }
+  .step { padding: 22px 20px; border-radius: 20px; }
+  .step::before { content: ""; position: absolute; left: -29px; top: 34px; width: 14px; height: 14px; border-radius: 50%; background: var(--night); border: 2px solid #ff8fb3; box-shadow: 0 0 12px rgba(255, 122, 165, .7); }
+  .step b { font-size: 40px; }
+  .step h3 { margin: 12px 0 6px; }
+
+  /* система: картина баннером сверху, список под ней */
+  .full.sys { display: block; min-height: 0; padding-bottom: 76px; }
+  .sys .pic { position: relative; top: 0; height: 74vw; max-height: 420px; object-position: 14% 50%; z-index: 0; }
+  .sys .veil { top: 0; bottom: auto; height: min(74vw, 420px); background: linear-gradient(180deg, var(--night) 0, transparent 22%, transparent 55%, var(--night) 100%); z-index: 1; pointer-events: none; }
+  .sys .box { position: relative; z-index: 2; margin: -34px 0 0; padding: 0; width: 100%; }
+  .row { padding: 13px 14px; gap: 13px; }
+  .row:hover { transform: none; }
+
+  .two { grid-template-columns: 1fr; gap: 16px; margin-top: 34px; }
+  .case { aspect-ratio: 4/4.3; border-radius: 24px; padding: 14px; }
+  .cap { padding: 16px 18px; }
+
+  .fin { min-height: 92svh; }
+  .fin .veil { background: linear-gradient(180deg, var(--night) 0, rgba(6, 9, 26, .25) 22%, rgba(6, 9, 26, .45) 55%, rgba(6, 9, 26, .9) 100%); }
+  .btns .pill.lg, .gbtn { width: 100%; justify-content: center; }
+  footer { justify-content: center; text-align: center; font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .marquee div, h1 em { animation: none; }
   * { transition-duration: .01ms !important; }
 }

@@ -107,6 +107,8 @@ const jsonLd = {
         </ul>
       </section>
 
+      <div class="marquee" aria-hidden="true"><div>{[0, 1].map(() => t.marquee.map((w) => (<><span>{w}</span><i>✦</i></>)))}</div></div>
+
       <section class="how pad" id="how">
         <div class="head">
           <div><p class="eb">{t.how.eyebrow}</p><h2>{t.how.title[0]}<br /><em>{t.how.title[1]}</em></h2></div>
@@ -117,6 +119,7 @@ const jsonLd = {
             <defs><linearGradient id="wg"><stop offset="0" stop-color="#ff5f8f" /><stop offset=".5" stop-color="#ffb37a" /><stop offset="1" stop-color="#ffe08a" /></linearGradient></defs>
             <path id="wp" d="M0,90 C150,10 250,120 400,60 S650,0 800,70 S1050,120 1200,30" fill="none" stroke="url(#wg)" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke" />
           </svg>
+          <i class="track"><i id="fill"></i></i>
           {t.how.steps.map((s, i) => (
             <article class="step"><b>{String(i + 1).padStart(2, "0")}</b><h3>{s.title}</h3><p>{s.text}</p></article>
           ))}

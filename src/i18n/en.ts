@@ -25,6 +25,7 @@ export const en: Dict = {
       { icon: "chart", title: "Analytics", text: "Numbers for the owner" },
     ],
   },
+  marquee: ["Diagnostics", "AI agents", "CRM", "WhatsApp", "Telegram", "Instagram", "Stock", "Bookings", "Analytics"],
   how: {
     eyebrow: "Approach",
     title: ["First we understand.", "Then we build."],

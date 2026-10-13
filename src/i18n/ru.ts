@@ -23,6 +23,7 @@ export const ru = {
       { icon: "chart", title: "Аналитика", text: "Цифры для владельца" },
     ],
   },
+  marquee: ["Диагностика", "ИИ-агенты", "CRM", "WhatsApp", "Telegram", "Instagram", "Склад", "Записи", "Аналитика"],
   how: {
     eyebrow: "Подход",
     title: ["Сначала разбираемся.", "Потом строим."],
