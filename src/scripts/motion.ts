@@ -9,7 +9,8 @@ ScrollTrigger.defaults({ toggleActions: "play none none reset" });
 
 // после обновления страницы начинаем сверху, чтобы вступление было видно
 if (!location.hash) {
-  history.scrollRestoration = "manual";
+  // ScrollTrigger сам управляет history.scrollRestoration, поэтому задаём режим через него
+  ScrollTrigger.clearScrollMemory("manual");
   scrollTo(0, 0);
 }
 
