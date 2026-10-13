@@ -27,7 +27,10 @@ const icons: Record<string, string> = {
 const cases = [caseDent, caseSalon];
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const noindex = import.meta.env.PUBLIC_NOINDEX === "1";
-const canonical = site.url ? new URL(t.home, site.url).href : "";
+// адрес сайта: свой домен из config.ts или адрес сборки (SITE_URL для предпросмотра)
+const origin = site.url || Astro.site?.origin || "";
+const abs = (p: string) => (origin ? origin + base + p : "");
+const canonical = abs(t.home);
 const contacts = [
   { label: "WhatsApp", href: links.whatsapp, main: true },
   { label: "Telegram", href: links.telegram },
@@ -40,7 +43,7 @@ const jsonLd = {
   "@type": "Organization",
   name: site.name,
   description: t.meta.description,
-  ...(site.url && { url: site.url }),
+  ...(origin && { url: abs("/") }),
   ...(site.email && { email: site.email }),
   ...(site.phone && { telephone: site.phone }),
   areaServed: "TJ",
@@ -58,12 +61,18 @@ const jsonLd = {
     <link rel="icon" type="image/png" href={base + "/favicon.png"} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     {canonical && <link rel="canonical" href={canonical} />}
-    {site.url && <link rel="alternate" hreflang="ru" href={new URL("/", site.url).href} />}
-    {site.url && <link rel="alternate" hreflang="en" href={new URL("/en/", site.url).href} />}
+    {origin && <link rel="alternate" hreflang="ru" href={abs("/")} />}
+    {origin && <link rel="alternate" hreflang="en" href={abs("/en/")} />}
     <meta property="og:type" content="website" />
     <meta property="og:title" content={t.meta.title} />
     <meta property="og:description" content={t.meta.description} />
-    {site.url && <meta property="og:image" content={new URL(hero.src, site.url).href} />}
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content={t.lang === "ru" ? "ru_RU" : "en_US"} />
+    {origin && <meta property="og:image" content={abs("/og.jpg")} />}
+    {origin && <meta property="og:image:width" content="1200" />}
+    {origin && <meta property="og:image:height" content="630" />}
+    <meta name="twitter:card" content="summary_large_image" />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
@@ -148,7 +157,7 @@ const jsonLd = {
         <div class="two">
           {t.cases.items.map((c, i) => (
             <article class="case">
-              <Image src={cases[i]} alt="" widths={[640, 1000, 1600]} sizes="(max-width: 900px) 100vw, 50vw" loading="lazy" quality={76} />
+              <Image src={cases[i]} alt={c.name + ", " + c.kind} widths={[640, 1000, 1600]} sizes="(max-width: 900px) 100vw, 50vw" loading="lazy" quality={76} />
               <span class="ill glass">{t.cases.note}</span>
               <div class="cap glass"><span>{c.kind}</span><h3>{c.name}</h3><p>{c.text}</p></div>
             </article>

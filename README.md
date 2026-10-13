@@ -1,43 +1,30 @@
-# Astro Starter Kit: Minimal
+# Сайт Code&Rose
 
-```sh
-npm create astro@latest -- --template minimal
+Одностраничный сайт на Astro, русская (`/`) и английская (`/en/`) версии.
+
+## Где что лежит
+
+- `src/i18n/ru.ts`, `src/i18n/en.ts` — все тексты сайта.
+- `src/config.ts` — контакты (WhatsApp, Telegram, Instagram, телефон, почта) и домен. Кнопка контакта появляется на сайте, когда её поле заполнено.
+- `src/assets/` — картинки. Astro сам сжимает их под размер экрана.
+- `src/components/Site.astro` — разметка страницы.
+- `src/styles/global.css` — оформление, в конце блок для телефонов и планшетов.
+- `src/scripts/motion.ts` — анимации (GSAP).
+
+## Команды
+
+```bash
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Локальный просмотр на http://localhost:4321.
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```bash
+npm run deploy:preview
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Сборка и выкладка пробной версии на https://shrb2704-del.github.io/code-rose-site/. В пробной версии стоит запрет на индексацию поисковиками.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Переезд на свой домен
 
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Вписать домен в `url` в `src/config.ts`, собрать командой `npm run build` без переменных `BASE_PATH` и `PUBLIC_NOINDEX` и выложить папку `dist` на хостинг.
