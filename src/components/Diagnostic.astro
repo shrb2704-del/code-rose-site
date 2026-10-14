@@ -1,0 +1,78 @@
+---
+import type { Dict } from "../i18n/ru";
+import { diag, site } from "../config";
+
+interface Props { t: Dict }
+const { t } = Astro.props;
+const data = { t: t.diag, lang: t.lang, endpoint: diag.endpoint, enabled: diag.enabled, whatsapp: site.whatsapp };
+---
+<div class="dg" id="dg" role="dialog" aria-modal="true" aria-labelledby="dg-title" hidden>
+  <div class="dg-bg"></div>
+  <div class="dg-top">
+    <button class="dg-icon" id="dg-back" type="button" aria-label={t.diag.back} hidden>←</button>
+    <div class="dg-bar"><i id="dg-progress"></i></div>
+    <button class="dg-icon" id="dg-close" type="button" aria-label={t.diag.close}>✕</button>
+  </div>
+  <div class="dg-body" id="dg-body">
+    <section class="dg-step" data-step="intro">
+      <p class="eb">Code&amp;Rose</p>
+      <h2 id="dg-title">{t.diag.intro.title[0]} <em>{t.diag.intro.title[1]}</em></h2>
+      <p class="lead">{t.diag.intro.text}</p>
+      <button class="pill lg" type="button" id="dg-start">{t.diag.intro.start} <i>→</i></button>
+      <p class="dg-note">{t.diag.intro.note}</p>
+    </section>
+    <section class="dg-step" data-step="quick">
+      <p class="dg-count" id="dg-qcount"></p>
+      <h3 class="dg-q" id="dg-qtitle"></h3>
+      <p class="dg-hint" id="dg-qhint"></p>
+      <div class="dg-opts" id="dg-opts"></div>
+      <input class="dg-input" id="dg-other" type="text" maxlength="80" hidden />
+      <button class="pill lg" type="button" id="dg-qnext" hidden>{t.diag.next} <i>→</i></button>
+    </section>
+    <section class="dg-step dg-chatstep" data-step="chat">
+      <p class="dg-count">{t.diag.chat.title}</p>
+      <div class="dg-msgs" id="dg-msgs" aria-live="polite"></div>
+      <form class="dg-send" id="dg-form">
+        <textarea id="dg-answer" rows="2" maxlength="600" placeholder={t.diag.chat.placeholder}></textarea>
+        <button class="pill" type="submit" id="dg-sendbtn">{t.diag.chat.send}</button>
+      </form>
+      <button class="dg-link" type="button" id="dg-skip">{t.diag.chat.skip}</button>
+    </section>
+    <section class="dg-step" data-step="contact">
+      <h3 class="dg-q">{t.diag.contact.title}</h3>
+      <p class="dg-hint">{t.diag.contact.note}</p>
+      <form class="dg-contact" id="dg-contact">
+        <input class="dg-input" name="name" required maxlength="80" placeholder={t.diag.contact.name} autocomplete="name" />
+        <input class="dg-input" name="business" maxlength="120" placeholder={t.diag.contact.business} autocomplete="organization" />
+        <input class="dg-input" name="whatsapp" required type="tel" inputmode="tel" maxlength="30" placeholder={t.diag.contact.whatsapp + ": +992 ..."} autocomplete="tel" />
+        <input class="dg-trap" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <label class="dg-check"><input type="checkbox" name="consent" required /> <span>{t.diag.contact.consent}</span></label>
+        <button class="pill lg" type="submit">{t.diag.contact.submit} <i>→</i></button>
+      </form>
+    </section>
+    <section class="dg-step dg-center" data-step="loading">
+      <div class="dg-spin"></div>
+      <p class="lead">{t.diag.loading}</p>
+    </section>
+    <section class="dg-step" data-step="result">
+      <p class="eb">{t.diag.result.title}</p>
+      <h3 class="dg-q" id="dg-strength"></h3>
+      <ol class="dg-points" id="dg-points"></ol>
+      <div class="dg-first glass"><span>{t.diag.result.firstStep}</span><p id="dg-firststep"></p></div>
+      <p class="lead" id="dg-invite"></p>
+      <div class="dg-actions">
+        <a class="pill lg" id="dg-wa" target="_blank" rel="noopener">{t.diag.result.whatsapp} <i>→</i></a>
+        <button class="gbtn glass" type="button" data-dg-close>{t.diag.result.done}</button>
+      </div>
+    </section>
+    <section class="dg-step" data-step="error">
+      <h3 class="dg-q">{t.diag.error.title}</h3>
+      <p class="lead" id="dg-errtext">{t.diag.error.text}</p>
+      <div class="dg-actions">
+        <a class="pill lg" id="dg-errwa" target="_blank" rel="noopener">{t.diag.error.button} <i>→</i></a>
+        <button class="gbtn glass" type="button" data-dg-close>{t.diag.close}</button>
+      </div>
+    </section>
+  </div>
+</div>
+<script type="application/json" id="dg-data" set:html={JSON.stringify(data)} />

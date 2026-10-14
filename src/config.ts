@@ -9,6 +9,12 @@ export const site = {
   email: "",
 };
 
+// Онлайн-диагностика: адрес сценария в n8n. enabled = false прячет кнопки (проверить можно по адресу с ?diag).
+export const diag = {
+  endpoint: "https://n8n.codeandrose.com/webhook/codeandrose-diag",
+  enabled: false,
+};
+
 export const links = {
   whatsapp: site.whatsapp ? `https://wa.me/${site.whatsapp}` : "",
   telegram: site.telegram ? `https://t.me/${site.telegram}` : "",

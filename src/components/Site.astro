@@ -6,6 +6,7 @@ import "@fontsource/caveat/600.css";
 import "../styles/global.css";
 import type { Dict } from "../i18n/ru";
 import { site, links } from "../config";
+import Diagnostic from "./Diagnostic.astro";
 import hero from "../assets/hero.jpg";
 import system from "../assets/system.jpg";
 import caseDent from "../assets/case-dent.jpg";
@@ -100,7 +101,7 @@ const jsonLd = {
           <h1><span class="l"><span>{t.hero.title[0]}</span></span><span class="l"><span><em>{t.hero.title[1]}</em></span></span></h1>
           <p class="sub">{t.hero.sub}</p>
           <div class="cta">
-            <a class="pill lg" href="#contact">{t.hero.primary} <i>→</i></a>
+            <a class="pill lg" href="#contact" data-diag-open>{t.hero.primary} <i>→</i></a>
             <a class="play" href="#how"><i class="glass">↓</i>{t.hero.secondary}</a>
           </div>
         </div>
@@ -173,6 +174,7 @@ const jsonLd = {
           <h2>{t.contact.title[0]} <em>{t.contact.title[1]}</em></h2>
           <p class="lead">{t.contact.lead}</p>
           <div class="btns">
+            <button class="gbtn glass diag-btn" type="button" data-diag-open>{t.diag.open} · {t.diag.openHint}</button>
             {contacts.map((c) => (
               <a class={c.main ? "pill lg" : "gbtn glass"} href={c.href} target={c.href.startsWith("http") ? "_blank" : undefined} rel={c.href.startsWith("http") ? "noopener" : undefined}>{c.label}{c.main && <i>→</i>}</a>
             ))}
@@ -181,9 +183,11 @@ const jsonLd = {
         <footer><span>© {new Date().getFullYear()} {site.name} · {t.footer.place}</span><span>{t.footer.line}</span></footer>
       </section>
     </main>
+    <Diagnostic t={t} />
 
     <script>
       import "../scripts/motion.ts";
+      import "../scripts/diagnostic.ts";
     </script>
   </body>
 </html>
