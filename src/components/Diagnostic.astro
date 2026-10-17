@@ -6,7 +6,7 @@ interface Props { t: Dict }
 const { t } = Astro.props;
 const data = { t: t.diag, lang: t.lang, endpoint: diag.endpoint, enabled: diag.enabled, whatsapp: site.whatsapp };
 ---
-<div class="dg" id="dg" role="dialog" aria-modal="true" aria-labelledby="dg-title" hidden>
+<div class="dg" id="dg" data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="dg-title" hidden>
   <div class="dg-bg"></div>
   <div class="dg-top">
     <button class="dg-icon" id="dg-back" type="button" aria-label={t.diag.back} hidden>←</button>

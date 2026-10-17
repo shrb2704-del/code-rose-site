@@ -1,5 +1,6 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger);
 // на телефоне адресная строка прячется при прокрутке — не пересчитываем из-за этого триггеры
@@ -46,6 +47,17 @@ mm.add(
   (ctx) => {
     const { desktop, mouse } = ctx.conditions as { desktop: boolean; mouse: boolean; motion: boolean };
     if (!(ctx.conditions as { motion: boolean }).motion) return;
+
+    // плавная прокрутка только с мышью и тачпадом: на телефоне остаётся родной скролл
+    let lenis: Lenis | undefined;
+    let tick: ((time: number) => void) | undefined;
+    if (mouse) {
+      lenis = new Lenis({ anchors: true });
+      lenis.on("scroll", ScrollTrigger.update);
+      tick = (time) => lenis!.raf(time * 1000);
+      gsap.ticker.add(tick);
+      gsap.ticker.lagSmoothing(0);
+    }
 
     // появление первого экрана
     const intro = gsap.timeline({ paused: true, defaults: { ease: "expo.out" } })
@@ -142,5 +154,12 @@ mm.add(
       gsap.from(el, { opacity: 0, y: 40, duration: 1, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 88%" } }),
     );
     gsap.from(".btns > *", { opacity: 0, y: 30, scale: 0.94, duration: 0.7, stagger: 0.1, ease: "back.out(1.5)", scrollTrigger: { trigger: ".btns", start: "top 92%" } });
+
+    // при смене условий (например, включили «уменьшить движение») возвращаем родную прокрутку
+    return () => {
+      if (tick) gsap.ticker.remove(tick);
+      lenis?.destroy();
+      gsap.ticker.lagSmoothing(500, 33);
+    };
   },
 );
